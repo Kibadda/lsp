@@ -2,9 +2,10 @@
 
 namespace ConfigLSP\Types;
 
-trait Response
+class Response extends Message
 {
-    use Message;
-
-    public ?int $id;
+    public function __construct(
+        public ?int $id,
+    ) {
+    }
 }

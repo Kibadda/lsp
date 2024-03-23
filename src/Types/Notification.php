@@ -2,9 +2,10 @@
 
 namespace ConfigLSP\Types;
 
-trait Notification
+class Notification extends Message
 {
-    use Message;
-
-    public string $method;
+    public function __construct(
+        public string $method,
+    ) {
+    }
 }

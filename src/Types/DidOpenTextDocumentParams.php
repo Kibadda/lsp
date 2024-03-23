@@ -2,7 +2,10 @@
 
 namespace ConfigLSP\Types;
 
-trait DidOpenTextDocumentParams
+class DidOpenTextDocumentParams
 {
-    public TextDocumentItem $textDocument;
+    public function __construct(
+        public TextDocumentItem $textDocument,
+    ) {
+    }
 }

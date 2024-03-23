@@ -2,10 +2,11 @@
 
 namespace ConfigLSP\Types;
 
-class InitializeParams
+class Range
 {
     public function __construct(
-        public ?ClientInfo $clientInfo,
+        public Position $start,
+        public Position $end,
     ) {
     }
 }

@@ -2,10 +2,11 @@
 
 namespace ConfigLSP\Types;
 
-class InitializeParams
+class CodeLens
 {
     public function __construct(
-        public ?ClientInfo $clientInfo,
+        public Range $range,
+        public Command $command,
     ) {
     }
 }

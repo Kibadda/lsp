@@ -2,10 +2,10 @@
 
 namespace ConfigLSP\Types;
 
-class InitializeParams
+class CodeLensOptions
 {
     public function __construct(
-        public ?ClientInfo $clientInfo,
+        public bool $resolveProvider,
     ) {
     }
 }

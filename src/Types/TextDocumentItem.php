@@ -2,10 +2,13 @@
 
 namespace ConfigLSP\Types;
 
-trait TextDocumentItem
+class TextDocumentItem
 {
-    public string $uri;
-    public string $languageId;
-    public int $version;
-    public string $text;
+    public function __construct(
+        public string $uri,
+        public string $languageId,
+        public int $version,
+        public string $text,
+    ) {
+    }
 }

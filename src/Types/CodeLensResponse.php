@@ -2,11 +2,12 @@
 
 namespace ConfigLSP\Types;
 
-class InitializeResponse extends Response
+class CodeLensResponse extends Response
 {
+    /** @var ?CodeLens[] $result */
     public function __construct(
         int $id,
-        public InitializeResult $result,
+        public ?array $result,
     ) {
         $this->id = $id;
     }

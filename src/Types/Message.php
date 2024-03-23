@@ -2,7 +2,10 @@
 
 namespace ConfigLSP\Types;
 
-trait Message
+class Message
 {
-    public string $jsonrpc = "2.0";
+    public function __construct(
+        public string $jsonrpc = '2.0',
+    ) {
+    }
 }

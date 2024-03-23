@@ -2,7 +2,10 @@
 
 namespace ConfigLSP\Types;
 
-trait DidCloseTextDocumentParams
+class DidCloseTextDocumentParams
 {
-    public TextDocumentIdentifier $textDocument;
+    public function __construct(
+        public TextDocumentIdentifier $textDocument,
+    ) {
+    }
 }

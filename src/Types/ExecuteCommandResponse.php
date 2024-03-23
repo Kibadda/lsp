@@ -2,11 +2,11 @@
 
 namespace ConfigLSP\Types;
 
-class InitializeResponse extends Response
+class ExecuteCommandResponse extends Response
 {
     public function __construct(
         int $id,
-        public InitializeResult $result,
+        public mixed $result,
     ) {
         $this->id = $id;
     }

@@ -2,10 +2,10 @@
 
 namespace ConfigLSP\Types;
 
-class InitializeParams
+class CodeLensParams
 {
     public function __construct(
-        public ?ClientInfo $clientInfo,
+        public TextDocumentIdentifier $textDocument,
     ) {
     }
 }

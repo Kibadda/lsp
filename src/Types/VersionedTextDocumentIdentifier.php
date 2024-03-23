@@ -2,9 +2,10 @@
 
 namespace ConfigLSP\Types;
 
-trait VersionedTextDocumentIdentifier
+class VersionedTextDocumentIdentifier extends TextDocumentIdentifier
 {
-    use TextDocumentIdentifier;
-
-    public int $version;
+    public function __construct(
+        public int $version,
+    ) {
+    }
 }

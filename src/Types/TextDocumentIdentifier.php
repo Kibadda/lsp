@@ -2,7 +2,10 @@
 
 namespace ConfigLSP\Types;
 
-trait TextDocumentIdentifier
+class TextDocumentIdentifier
 {
-    public string $uri;
+    public function __construct(
+        public string $uri,
+    ) {
+    }
 }

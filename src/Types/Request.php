@@ -2,10 +2,11 @@
 
 namespace ConfigLSP\Types;
 
-trait Request
+class Request extends Message
 {
-    use Message;
-
-    public int $id;
-    public string $method;
+    public function __construct(
+        public int $id,
+        public string $method,
+    ) {
+    }
 }

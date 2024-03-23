@@ -6,13 +6,24 @@ use Exception;
 
 class Logger
 {
+    private static ?self $instance;
+
     public const ERROR = 'ERROR';
     public const INFO = 'INFO';
 
     private string $path;
     private $stream;
 
-    public function __construct()
+    public static function get(): self
+    {
+        if (empty(self::$instance)) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
+    private function __construct()
     {
         $this->path = __DIR__ . '/../log.txt';
         $this->stream = fopen($this->path, 'w');

@@ -2,7 +2,10 @@
 
 namespace ConfigLSP\Types;
 
-trait TextDocumentContentChangesEvent
+class TextDocumentContentChangesEvent
 {
-    public string $text;
+    public function __construct(
+        public string $text,
+    ) {
+    }
 }

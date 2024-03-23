@@ -2,9 +2,11 @@
 
 namespace ConfigLSP\Types;
 
-trait InitializeRequest
+class InitializeRequest extends Request
 {
-    use Request;
-
-    public InitializeParams $params;
+    public function __construct(
+        public InitializeParams $params,
+    ) {
+        $this->method = Method::INITIALIZE;
+    }
 }

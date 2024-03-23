@@ -2,10 +2,11 @@
 
 namespace ConfigLSP\Types;
 
-class InitializeParams
+class Position
 {
     public function __construct(
-        public ?ClientInfo $clientInfo,
+        public int $line,
+        public int $character,
     ) {
     }
 }

@@ -2,9 +2,12 @@
 
 namespace ConfigLSP\Types;
 
-trait DidChangeTextDocumentParams
+class DidChangeTextDocumentParams
 {
-    public VersionedTextDocumentIdentifier $textDocument;
-    /** @var TextDocumentContentChangesEvent[] */
-    public array $contentChanges;
+    /** @var TextDocumentContentChangesEvent[] $contentChanges */
+    public function __construct(
+        public VersionedTextDocumentIdentifier $textDocument,
+        public array $contentChanges,
+    ) {
+    }
 }
