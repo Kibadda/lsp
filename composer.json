@@ -1,0 +1,17 @@
+{
+    "name": "michael/configlsp",
+    "type": "project",
+    "version": "1.0",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "ConfigLSP\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Michael Strobel",
+            "email": "mstrobel97@gmail.com"
+        }
+    ]
+}
