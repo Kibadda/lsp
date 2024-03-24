@@ -1,4 +1,4 @@
-# ConfigLSP
+# LSP
 
 repository for my own custom language server
 

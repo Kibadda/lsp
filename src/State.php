@@ -1,29 +1,18 @@
 <?php
 
-namespace ConfigLSP;
+namespace LSP;
 
-use ConfigLSP\Types\CodeLens;
-use ConfigLSP\Types\Command;
-use ConfigLSP\Types\Position;
-use ConfigLSP\Types\Range;
+use LSP\Protocol\Type\CodeLens;
+use LSP\Protocol\Type\Command;
+use LSP\Protocol\Type\Position;
+use LSP\Protocol\Type\Range;
 
 class State
 {
-    private static self $instance;
-
-    public static function get(): self
-    {
-        if (empty(self::$instance)) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
     /** @var array<string, string> $textDocuments */
     /** @var array<string, CodeLens[]> $codeLenses */
     /** @var array<string, callable> $commands */
-    private function __construct(
+    public function __construct(
         private array $textDocuments = [],
         private array $codeLenses = [],
         private array $commands = [],

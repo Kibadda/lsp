@@ -1,14 +1,14 @@
 <?php
 
-namespace ConfigLSP;
+namespace LSP;
 
-use ConfigLSP\Types\Notification;
-use ConfigLSP\Types\Request;
+use LSP\Protocol\Notification;
+use LSP\Protocol\Request;
 use Exception;
 
 class RPC
 {
-    public function split(string $data): ?array
+    public static function split(string $data): ?array
     {
         $split = preg_split('/\r\n\r\n/', $data);
 
@@ -39,7 +39,7 @@ class RPC
     /**
      * @return Request|Notification|null
      */
-    public function decode(string $data, ?string &$error): mixed
+    public static function decode(string $data, ?string &$error): mixed
     {
         $error = null;
 
@@ -69,7 +69,7 @@ class RPC
         return $decoded;
     }
 
-    public function encode(object $response): string
+    public static function encode(object $response): string
     {
         $json = json_encode($response);
         $length = strlen($json);

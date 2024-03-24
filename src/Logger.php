@@ -1,31 +1,22 @@
 <?php
 
-namespace ConfigLSP;
+namespace LSP;
 
 use Exception;
 
 class Logger
 {
-    private static ?self $instance;
-
     public const ERROR = 'ERROR';
     public const INFO = 'INFO';
 
+    private string $context;
     private string $path;
     private $stream;
 
-    public static function get(): self
+    public function __construct(string $name)
     {
-        if (empty(self::$instance)) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
-    private function __construct()
-    {
-        $this->path = __DIR__ . '/../log.txt';
+        $this->context = $name;
+        $this->path = __DIR__ . "/../{$this->context}.log";
         $this->stream = fopen($this->path, 'w');
 
         if ($this->stream === false) {
@@ -42,7 +33,7 @@ class Logger
             $message = json_encode($message, JSON_PRETTY_PRINT);
         }
 
-        fwrite($this->stream, "[{$date}] [{$level}] {$message}\n");
+        fwrite($this->stream, "[{$date}] [{$this->context}] [{$level}] {$message}\n");
     }
 
     public function __destruct()

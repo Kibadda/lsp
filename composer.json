@@ -5,7 +5,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "ConfigLSP\\": "src/"
+            "LSP\\": "src/"
         }
     },
     "authors": [

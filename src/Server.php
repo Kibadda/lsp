@@ -1,43 +1,60 @@
 <?php
 
-namespace ConfigLSP;
+namespace LSP;
 
-use ConfigLSP\Types\Method;
-use ConfigLSP\Types\Notification;
-use ConfigLSP\Types\Request;
+use LSP\Protocol\Type\Method;
+use LSP\Protocol\Type\ServerCapabilities;
+use LSP\Protocol\Type\ServerInfo;
 
 class Server
 {
-    private Logger $logger;
+    public string $name;
+    public Context $context;
 
-    public function __construct(
-        private RPC $rpc = new RPC(),
-    ) {
-        $this->logger = Logger::get();
+    public static function build(ServerName $name): self
+    {
+        return new self(
+            name: $name->value,
+            capabilities: $name->capabilities(),
+            serverInfo: new ServerInfo(
+                name: $name->value,
+                version: '1.0',
+            ),
+        );
+    }
+
+    public function __construct(string $name, ServerCapabilities $capabilities, ServerInfo $serverInfo)
+    {
+        $this->name = $name;
+        $this->context = new Context($this->name, $capabilities, $serverInfo);
     }
 
     public function run(): void
     {
-        $this->logger->log('Started server');
+        $this->context->logger->log('Started');
 
         $data = '';
 
         while (true) {
             $data .= stream_get_contents(STDIN, 1);
 
-            $result = $this->rpc->split($data);
+            $result = RPC::split($data);
 
             if ($result) {
                 $data = substr($data, $result['length']);
 
-                $message = $this->rpc->decode($result['data'], $error);
+                $message = RPC::decode($result['data'], $error);
 
                 if ($error) {
-                    $this->logger->log($error);
+                    $this->context->logger->log($error);
                     continue;
                 }
 
-                $this->handleMessage($message);
+                $this->handle($message);
+
+                if ($this->context->exit) {
+                    exit($this->context->shouldExit ? 0 : 1);
+                }
             }
         }
     }
@@ -45,21 +62,22 @@ class Server
     /**
      * @param Request|Notification $message
      */
-    private function handleMessage(object $message): void
+    private function handle(object $message): void
     {
-        $this->logger->log("Received msg with method: {$message->method}");
+        $this->context->logger->log("Received method: {$message->method}");
 
         $method = Method::tryFrom($message->method);
 
         if (!$method instanceof Method) {
-            $this->logger->log("Unrecognized method: {$message->method}");
+            $this->context->logger->log("Unrecognized method: {$message->method}");
+
             return;
         }
 
-        $response = $method->handle($message);
+        $response = $method->handle($message, $this->context);
 
         if ($response) {
-            fwrite(STDOUT, $this->rpc->encode($response));
+            fwrite(STDOUT, RPC::encode($response));
         }
     }
 }
