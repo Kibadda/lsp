@@ -11,11 +11,13 @@ use LSP\Protocol\Request\CodeLensRequest;
 use LSP\Protocol\Request\ExecuteCommandRequest;
 use LSP\Protocol\Request\InitializeRequest;
 use LSP\Protocol\Request\ShutdownRequest;
+use LSP\Protocol\Request\TextDocumentDefinitionRequest;
 use LSP\Protocol\Response\CodeLensResponse;
 use LSP\Protocol\Response\ExecuteCommandResponse;
 use LSP\Protocol\Response\InitializeResponse;
 use LSP\Protocol\Response\Response;
 use LSP\Protocol\Response\ShutdownResponse;
+use LSP\Protocol\Response\TextDocumentDefinitionResponse;
 
 enum Method: string
 {
@@ -27,6 +29,7 @@ enum Method: string
     case WORKSPACE_EXECUTECOMMAND = 'workspace/executeCommand';
     case SHUTDOWN = 'shutdown';
     case EXIT = 'exit';
+    case TEXTDOCUMENT_DEFINITION = 'textDocument/definition';
 
     public function handle(object $message, Context $context): ?Response
     {
@@ -39,6 +42,7 @@ enum Method: string
             self::WORKSPACE_EXECUTECOMMAND => $this->workspaceExecuteCommand($message, $context),
             self::SHUTDOWN => $this->shutdown($message, $context),
             self::EXIT => $this->exit($message, $context),
+            self::TEXTDOCUMENT_DEFINITION => $this->textDocumentDefinition($message, $context),
             default => null,
         };
     }
@@ -140,5 +144,18 @@ enum Method: string
         $context->logger->log("Exit");
 
         $context->exit = true;
+    }
+
+    /**
+     * @param TextDocumentDefinitionRequest $message
+     */
+    private function textDocumentDefinition(object $message, Context $context): TextDocumentDefinitionResponse
+    {
+        $context->logger->log("Requesting definition for: {$message->params->textDocument->uri}:{$message->params->position->line}:{$message->params->position->character}");
+
+        return new TextDocumentDefinitionResponse(
+            id: $message->id,
+            result: null,
+        );
     }
 }
