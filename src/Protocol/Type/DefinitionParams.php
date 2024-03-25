@@ -2,10 +2,12 @@
 
 namespace LSP\Protocol\Type;
 
+use LSP\Builder;
+
 class DefinitionParams
 {
-    public function __construct(
-        public TextDocumentIdentifier $textDocument,
-        public Position $position,
-    ){}
+    use Builder;
+
+    public TextDocumentIdentifier $textDocument;
+    public Position $position;
 }

@@ -2,10 +2,7 @@
 
 namespace LSP\Protocol\Type;
 
-class Message
+abstract class Message
 {
-    public function __construct(
-        public string $jsonrpc = '2.0',
-    ) {
-    }
+    public string $jsonrpc = '2.0';
 }

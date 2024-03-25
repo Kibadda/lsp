@@ -2,8 +2,8 @@
 
 namespace LSP;
 
-use LSP\Protocol\Notification;
-use LSP\Protocol\Request;
+use LSP\Protocol\Notification\Notification;
+use LSP\Protocol\Request\Request;
 use Exception;
 
 class RPC

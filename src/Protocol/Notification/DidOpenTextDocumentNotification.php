@@ -2,14 +2,24 @@
 
 namespace LSP\Protocol\Notification;
 
+use LSP\Builder;
+use LSP\Context;
+use LSP\Handler;
+use LSP\Protocol\Response\Response;
 use LSP\Protocol\Type\DidOpenTextDocumentParams;
-use LSP\Protocol\Type\Method;
 
-class DidOpenTextDocumentNotification extends Notification
+class DidOpenTextDocumentNotification extends Notification implements Handler
 {
-    public function __construct(
-        public DidOpenTextDocumentParams $params,
-    ) {
-        $this->method = Method::TEXTDOCUMENT_DIDOPEN;
+    use Builder;
+
+    public DidOpenTextDocumentParams $params;
+
+    public function handle(Context $context): ?Response
+    {
+        $context->logger->log("Opened: {$this->params->textDocument->uri}");
+
+        $context->state->openTextDocument($this->params->textDocument->uri, $this->params->textDocument->text);
+
+        return null;
     }
 }

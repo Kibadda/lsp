@@ -4,10 +4,7 @@ namespace LSP\Protocol\Type;
 
 use LSP\Builder;
 
-class ClientInfo
+class InitializedParams
 {
     use Builder;
-
-    public string $name;
-    public ?string $version;
 }

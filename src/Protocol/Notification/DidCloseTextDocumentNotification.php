@@ -2,14 +2,23 @@
 
 namespace LSP\Protocol\Notification;
 
+use LSP\Builder;
+use LSP\Context;
+use LSP\Protocol\Response\Response;
 use LSP\Protocol\Type\DidCloseTextDocumentParams;
-use LSP\Protocol\Type\Method;
 
 class DidCloseTextDocumentNotification extends Notification
 {
-    public function __construct(
-        public DidCloseTextDocumentParams $params,
-    ) {
-        $this->method = Method::TEXTDOCUMENT_DIDCLOSE;
+    use Builder;
+
+    public DidCloseTextDocumentParams $params;
+
+    public function handle(Context $context): ?Response
+    {
+        $context->logger->log("Closed: {$this->params->textDocument->uri}");
+
+        $context->state->closeTextDocument($this->params->textDocument->uri);
+
+        return null;
     }
 }

@@ -2,10 +2,11 @@
 
 namespace LSP\Protocol\Type;
 
+use LSP\Builder;
+
 class TextDocumentContentChangesEvent
 {
-    public function __construct(
-        public string $text,
-    ) {
-    }
+    use Builder;
+
+    public string $text;
 }

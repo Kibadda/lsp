@@ -2,10 +2,11 @@
 
 namespace LSP\Protocol\Type;
 
+use LSP\Builder;
+
 class DidOpenTextDocumentParams
 {
-    public function __construct(
-        public TextDocumentItem $textDocument,
-    ) {
-    }
+    use Builder;
+
+    public TextDocumentItem $textDocument;
 }

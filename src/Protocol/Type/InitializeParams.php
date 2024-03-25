@@ -2,10 +2,11 @@
 
 namespace LSP\Protocol\Type;
 
+use LSP\Builder;
+
 class InitializeParams
 {
-    public function __construct(
-        public ?ClientInfo $clientInfo,
-    ) {
-    }
+    use Builder;
+
+    public ?ClientInfo $clientInfo;
 }

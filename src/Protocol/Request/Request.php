@@ -2,13 +2,15 @@
 
 namespace LSP\Protocol\Request;
 
+use LSP\Context;
+use LSP\Handler;
+use LSP\Protocol\Response\Response;
 use LSP\Protocol\Type\Message;
 
-class Request extends Message
+abstract class Request extends Message implements Handler
 {
-    public function __construct(
-        public int $id,
-        public string $method,
-    ) {
-    }
+    public int $id;
+    public string $method;
+
+    abstract public function handle(Context $context): ?Response;
 }

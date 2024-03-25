@@ -2,10 +2,11 @@
 
 namespace LSP\Protocol\Type;
 
+use LSP\Builder;
+
 class VersionedTextDocumentIdentifier extends TextDocumentIdentifier
 {
-    public function __construct(
-        public int $version,
-    ) {
-    }
+    use Builder;
+
+    public int $version;
 }

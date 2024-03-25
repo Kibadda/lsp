@@ -2,11 +2,12 @@
 
 namespace LSP\Protocol\Type;
 
+use LSP\Builder;
+
 class Position
 {
-    public function __construct(
-        public int $line,
-        public int $character,
-    ) {
-    }
+    use Builder;
+
+    public int $line;
+    public int $character;
 }

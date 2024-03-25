@@ -2,10 +2,11 @@
 
 namespace LSP\Protocol\Type;
 
+use LSP\Builder;
+
 class CodeLensParams
 {
-    public function __construct(
-        public TextDocumentIdentifier $textDocument,
-    ) {
-    }
+    use Builder;
+
+    public TextDocumentIdentifier $textDocument;
 }

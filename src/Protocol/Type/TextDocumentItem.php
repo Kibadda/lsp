@@ -2,13 +2,14 @@
 
 namespace LSP\Protocol\Type;
 
+use LSP\Builder;
+
 class TextDocumentItem
 {
-    public function __construct(
-        public string $uri,
-        public string $languageId,
-        public int $version,
-        public string $text,
-    ) {
-    }
+    use Builder;
+
+    public string $uri;
+    public string $languageId;
+    public int $version;
+    public string $text;
 }

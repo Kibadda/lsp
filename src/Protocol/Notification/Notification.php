@@ -2,12 +2,14 @@
 
 namespace LSP\Protocol\Notification;
 
+use LSP\Context;
+use LSP\Handler;
+use LSP\Protocol\Response\Response;
 use LSP\Protocol\Type\Message;
 
-class Notification extends Message
+abstract class Notification extends Message implements Handler
 {
-    public function __construct(
-        public string $method,
-    ) {
-    }
+    public string $method;
+
+    abstract public function handle(Context $context): ?Response;
 }

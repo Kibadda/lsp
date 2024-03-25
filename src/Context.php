@@ -14,6 +14,7 @@ class Context
     public ServerCapabilities $capabilities;
     public ServerInfo $serverInfo;
 
+    public bool $isInitialized;
     public bool $shouldExit;
     public bool $exit;
 

@@ -2,12 +2,13 @@
 
 namespace LSP\Protocol\Type;
 
+use LSP\Builder;
+
 class DidChangeTextDocumentParams
 {
-    /** @var TextDocumentContentChangesEvent[] $contentChanges */
-    public function __construct(
-        public VersionedTextDocumentIdentifier $textDocument,
-        public array $contentChanges,
-    ) {
-    }
+    use Builder;
+
+    public VersionedTextDocumentIdentifier $textDocument;
+    /** @var TextDocumentContentChangesEvent[] */
+    public array $contentChanges;
 }

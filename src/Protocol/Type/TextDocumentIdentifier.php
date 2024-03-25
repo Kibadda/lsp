@@ -2,10 +2,11 @@
 
 namespace LSP\Protocol\Type;
 
+use LSP\Builder;
+
 class TextDocumentIdentifier
 {
-    public function __construct(
-        public string $uri,
-    ) {
-    }
+    use Builder;
+
+    public string $uri;
 }
