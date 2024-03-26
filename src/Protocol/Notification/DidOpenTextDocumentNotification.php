@@ -15,6 +15,20 @@ class DidOpenTextDocumentNotification extends Notification
     public Method $method = Method::TEXTDOCUMENT_DIDOPEN;
     public DidOpenTextDocumentParams $params;
 
+    public function __construct(
+        string $jsonrpc,
+
+        Method $method,
+        DidOpenTextDocumentParams $params,
+    ) {
+        parent::__construct(
+            jsonrpc: $jsonrpc
+        );
+
+        $this->method = $method;
+        $this->params = $params;
+    }
+
     public function handle(Context $context): ?Response
     {
         $context->logger->log("Opened: {$this->params->textDocument->uri}");

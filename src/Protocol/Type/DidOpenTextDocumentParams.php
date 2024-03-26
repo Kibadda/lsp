@@ -8,5 +8,8 @@ class DidOpenTextDocumentParams
 {
     use Builder;
 
-    public TextDocumentItem $textDocument;
+    public function __construct(
+        public TextDocumentItem $textDocument,
+    ) {
+    }
 }

@@ -13,6 +13,18 @@ class ExitNotification extends Notification
 
     public Method $method = Method::EXIT;
 
+    public function __construct(
+        string $jsonrpc,
+
+        Method $method,
+    ) {
+        parent::__construct(
+            jsonrpc: $jsonrpc
+        );
+
+        $this->method = $method;
+    }
+
     public function handle(Context $context): ?Response
     {
         $context->logger->log("Exit");

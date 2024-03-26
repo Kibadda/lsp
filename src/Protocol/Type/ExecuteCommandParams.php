@@ -8,6 +8,12 @@ class ExecuteCommandParams
 {
     use Builder;
 
-    public string $command;
-    public ?array $arguments;
+    /**
+     * @param ?mixed[] $arguments
+     */
+    public function __construct(
+        public string $command,
+        public ?array $arguments,
+    ) {
+    }
 }

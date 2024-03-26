@@ -4,20 +4,24 @@ namespace LSP;
 
 use Exception;
 use ReflectionClass;
+use ReflectionNamedType;
 use UnitEnum;
 
 trait Builder
 {
-    public static function from(object $object): static
+    public static function from(object $object): self
     {
-        $reflection = new ReflectionClass(static::class);
-
-        $static = new static();
-
+        $reflection = new ReflectionClass(self::class);
         $default = $reflection->getDefaultProperties();
+        $arguments = [];
+
         foreach ($reflection->getProperties() as $property) {
             $name = $property->getName();
             $type = $property->getType();
+
+            if (!$type instanceof ReflectionNamedType) {
+                throw new Exception("could not handle non named type");
+            }
 
             if (!$type->allowsNull() && !property_exists($object, $name)) {
                 throw new Exception("missing property {$name}");
@@ -26,6 +30,7 @@ trait Builder
             if ($type->allowsNull() && !property_exists($object, $name)) {
                 continue;
             }
+
 
             if ($type->getName() == 'array') {
                 if (!is_array($object->$name)) {
@@ -39,18 +44,23 @@ trait Builder
                     if (!str_starts_with($type, '\\')) {
                         $type = "{$reflection->getNamespaceName()}\\{$type}";
                     }
+
+                    if (!class_exists($type)) {
+                        throw new Exception("class {$type} does not exist");
+                    }
+
                     $typeReflection = new ReflectionClass($type);
 
                     if (in_array(__TRAIT__, $typeReflection->getTraitNames())) {
-                        $static->$name = [];
+                        $arguments[$name] = [];
                         foreach ($object->$name as $obj) {
-                            $static->$name[] = $type::from($obj);
+                            $arguments[$name][] = $type::from($obj);
                         }
                     } else {
                         throw new Exception("{$type} does not have trait Builder");
                     }
                 } else {
-                    $static->$name = $object->$name;
+                    $arguments[$name] = $object->$name;
                 }
             } else if (self::is_enum($type)) {
                 $enum = $type->getName();
@@ -64,20 +74,25 @@ trait Builder
                     throw new Exception("wrong value for {$name}. expected: {$default[$name]->value}. actual: {$object->$name}");
                 }
 
-                $static->$name = $try;
+                $arguments[$name] = $try;
             } else {
                 if ($type->isBuiltin()) {
                     if (!empty($default[$name]) && $default[$name] != $object->$name) {
                         throw new Exception("wrong value for {$name}. expected: {$default[$name]}. actual: {$object->$name}");
                     }
 
-                    $static->$name = $object->$name;
+                    $arguments[$name] = $object->$name;
                 } else {
                     $type = $type->getName();
+
+                    if (!class_exists($type)) {
+                        throw new Exception("class {$type} does not exist");
+                    }
+
                     $typeReflection = new ReflectionClass($type);
 
                     if (in_array(__TRAIT__, $typeReflection->getTraitNames())) {
-                        $static->$name = $type::from($object->$name);
+                        $arguments[$name] = $type::from($object->$name);
                     } else {
                         throw new Exception("{$type} does not have trait Builder");
                     }
@@ -85,7 +100,7 @@ trait Builder
             }
         }
 
-        return $static;
+        return new self(...$arguments);
     }
 
     private static function is_enum(string $class): bool

@@ -1,14 +1,12 @@
 <?php
 
-namespace LSP;
+namespace LSP\RPC;
 
-use LSP\Protocol\Notification\Notification;
-use LSP\Protocol\Request\Request;
 use Exception;
 
 class RPC
 {
-    public static function split(string $data): ?array
+    public static function split(string $data): ?Data
     {
         $split = preg_split('/\r\n\r\n/', $data);
 
@@ -30,16 +28,16 @@ class RPC
 
         $totalLength = strlen($header) + 4 + $contentLength;
 
-        return [
-            'length' => $totalLength,
-            'data' => substr($data, 0, $totalLength),
-        ];
+        return new Data(
+            length: $totalLength,
+            data: substr($data, 0, $totalLength),
+        );
     }
 
     /**
-     * @return Request|Notification|null
+     * @return ?IncomingMessage
      */
-    public static function decode(string $data, ?string &$error): mixed
+    public static function decode(string $data, ?string &$error): ?IncomingMessage
     {
         $error = null;
 
@@ -61,17 +59,22 @@ class RPC
 
         $decoded = json_decode($content);
 
-        if (json_last_error() != JSON_ERROR_NONE) {
+        if (json_last_error() != JSON_ERROR_NONE || !is_object($decoded)) {
             $error = 'could not parse content';
             return null;
         }
 
-        return $decoded;
+        return IncomingMessage::from($decoded);
     }
 
     public static function encode(object $response): string
     {
         $json = json_encode($response);
+
+        if ($json === false) {
+            throw new Exception('could not encode message');
+        }
+
         $length = strlen($json);
 
         return "Content-Length: {$length}\r\n\r\n{$json}";

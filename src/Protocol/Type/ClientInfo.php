@@ -8,6 +8,9 @@ class ClientInfo
 {
     use Builder;
 
-    public string $name;
-    public ?string $version;
+    public function __construct(
+        public string $name,
+        public ?string $version,
+    ) {
+    }
 }

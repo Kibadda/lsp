@@ -14,6 +14,20 @@ class ShutdownRequest extends Request
 
     public Method $method = Method::SHUTDOWN;
 
+    public function __construct(
+        string $jsonrpc,
+        int $id,
+
+        Method $method,
+    ) {
+        parent::__construct(
+            jsonrpc: $jsonrpc,
+            id: $id,
+        );
+
+        $this->method = $method;
+    }
+
     public function handle(Context $context): ?Response
     {
         $context->logger->log("Prepare shutdown");

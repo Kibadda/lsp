@@ -17,9 +17,33 @@ class InitializeRequest extends Request
     public Method $method = Method::INITIALIZE;
     public InitializeParams $params;
 
+    public function __construct(
+        string $jsonrpc,
+        int $id,
+
+        Method $method,
+        InitializeParams $params,
+    ) {
+        parent::__construct(
+            jsonrpc: $jsonrpc,
+            id: $id,
+        );
+
+        $this->method = $method;
+        $this->params = $params;
+    }
+
     public function handle(Context $context): ?Response
     {
-        $context->logger->log("Connected to: {$this->params->clientInfo->name} {$this->params->clientInfo->version}");
+        if ($this->params->clientInfo) {
+            if ($this->params->clientInfo->version) {
+                $context->logger->log("Connected to {$this->params->clientInfo->name} with version {$this->params->clientInfo->version}");
+            } else {
+                $context->logger->log("Connected to {$this->params->clientInfo->name}");
+            }
+        } else {
+            $context->logger->log('Connected');
+        }
 
         return new InitializeResponse(
             id: $this->id,

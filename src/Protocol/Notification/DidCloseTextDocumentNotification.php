@@ -15,6 +15,20 @@ class DidCloseTextDocumentNotification extends Notification
     public Method $method = Method::TEXTDOCUMENT_DIDCLOSE;
     public DidCloseTextDocumentParams $params;
 
+    public function __construct(
+        string $jsonrpc,
+
+        Method $method,
+        DidCloseTextDocumentParams $params,
+    ) {
+        parent::__construct(
+            jsonrpc: $jsonrpc
+        );
+
+        $this->method = $method;
+        $this->params = $params;
+    }
+
     public function handle(Context $context): ?Response
     {
         $context->logger->log("Closed: {$this->params->textDocument->uri}");

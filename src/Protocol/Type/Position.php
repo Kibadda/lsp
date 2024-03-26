@@ -8,6 +8,9 @@ class Position
 {
     use Builder;
 
-    public int $line;
-    public int $character;
+    public function __construct(
+        public int $line,
+        public int $character,
+    ) {
+    }
 }

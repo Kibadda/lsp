@@ -9,17 +9,17 @@ class Logger
     public const ERROR = 'ERROR';
     public const INFO = 'INFO';
 
-    private string $context;
+    private string $name;
     private string $path;
-    private $stream;
+    private mixed $stream;
 
     public function __construct(string $name)
     {
-        $this->context = $name;
-        $this->path = __DIR__ . "/../{$this->context}.log";
+        $this->name = $name;
+        $this->path = __DIR__ . "/../{$this->name}.log";
         $this->stream = fopen($this->path, 'w');
 
-        if ($this->stream === false) {
+        if (!is_resource($this->stream)) {
             throw new Exception('could not open log file');
         }
     }
@@ -28,12 +28,14 @@ class Logger
     {
         $date = date('Y-m-d H:i:s');
 
+        $message = match (true) {
+            is_string($message) => (string) $message,
+            is_numeric($message) => (int) $message,
+            is_bool($message) => (bool) $message,
+            default => json_encode($message, JSON_PRETTY_PRINT),
+        };
 
-        if (!in_array(gettype($message), ['boolean', 'integer', 'double', 'string'])) {
-            $message = json_encode($message, JSON_PRETTY_PRINT);
-        }
-
-        fwrite($this->stream, "[{$date}] [{$this->context}] [{$level}] {$message}\n");
+        fwrite($this->stream, "[{$date}] [{$this->name}] [{$level}] {$message}\n");
     }
 
     public function __destruct()

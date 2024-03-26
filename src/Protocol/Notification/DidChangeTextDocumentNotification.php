@@ -15,6 +15,20 @@ class DidChangeTextDocumentNotification extends Notification
     public Method $method = Method::TEXTDOCUMENT_DIDCHANGE;
     public DidChangeTextDocumentParams $params;
 
+    public function __construct(
+        string $jsonrpc,
+
+        Method $method,
+        DidChangeTextDocumentParams $params,
+    ) {
+        parent::__construct(
+            jsonrpc: $jsonrpc
+        );
+
+        $this->method = $method;
+        $this->params = $params;
+    }
+
     public function handle(Context $context): ?Response
     {
         $context->logger->log("Changed: {$this->params->textDocument->uri}");

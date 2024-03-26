@@ -8,5 +8,11 @@ class VersionedTextDocumentIdentifier extends TextDocumentIdentifier
 {
     use Builder;
 
-    public int $version;
+    public function __construct(
+        public int $version,
+
+        string $uri,
+    ) {
+        parent::__construct($uri);
+    }
 }

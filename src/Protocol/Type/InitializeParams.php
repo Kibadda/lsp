@@ -8,5 +8,8 @@ class InitializeParams
 {
     use Builder;
 
-    public ?ClientInfo $clientInfo;
+    public function __construct(
+        public ?ClientInfo $clientInfo,
+    ) {
+    }
 }

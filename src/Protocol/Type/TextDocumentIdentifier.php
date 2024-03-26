@@ -8,5 +8,8 @@ class TextDocumentIdentifier
 {
     use Builder;
 
-    public string $uri;
+    public function __construct(
+        public string $uri,
+    ) {
+    }
 }

@@ -4,7 +4,9 @@ namespace LSP\Protocol\Type;
 
 class ExecuteCommandOptions
 {
-    /** @var string[] $commands */
+    /**
+     * @param string[] $commands
+     */
     public function __construct(
         public array $commands,
     ) {

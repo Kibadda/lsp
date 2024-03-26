@@ -8,5 +8,8 @@ class DidCloseTextDocumentParams
 {
     use Builder;
 
-    public TextDocumentIdentifier $textDocument;
+    public function __construct(
+        public TextDocumentIdentifier $textDocument,
+    ) {
+    }
 }

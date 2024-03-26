@@ -6,20 +6,22 @@ use LSP\Protocol\Type\CodeLens;
 use LSP\Protocol\Type\Command;
 use LSP\Protocol\Type\Position;
 use LSP\Protocol\Type\Range;
+use stdClass;
 
 class State
 {
-    /** @var array<string, string> $textDocuments */
-    /** @var array<string, CodeLens[]> $codeLenses */
-    /** @var array<string, callable> $commands */
+    /**
+     * @param array<string, string> $textDocuments
+     * @param array<string, CodeLens[]> $codeLenses
+     * @param array<string, callable> $commands
+     */
     public function __construct(
         private array $textDocuments = [],
         private array $codeLenses = [],
         private array $commands = [],
     ) {
-
         $this->commands = [
-            'open_plugin_in_browser' => function (object $arguments) {
+            'open_plugin_in_browser' => function (stdClass $arguments) {
                 exec("xdg-open https://github.com/{$arguments->text}");
             }
         ];
@@ -43,6 +45,9 @@ class State
         unset($this->codeLenses[$uri]);
     }
 
+    /**
+     * @return ?CodeLens[]
+     */
     public function getCodeLenses(string $uri): ?array
     {
         if (!empty($this->codeLenses[$uri])) {

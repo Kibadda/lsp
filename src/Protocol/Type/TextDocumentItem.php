@@ -8,8 +8,11 @@ class TextDocumentItem
 {
     use Builder;
 
-    public string $uri;
-    public string $languageId;
-    public int $version;
-    public string $text;
+    public function __construct(
+        public string $uri,
+        public string $languageId,
+        public int $version,
+        public string $text,
+    ) {
+    }
 }

@@ -7,16 +7,16 @@ use LSP\Protocol\Notification\DidCloseTextDocumentNotification;
 use LSP\Protocol\Notification\DidOpenTextDocumentNotification;
 use LSP\Protocol\Notification\ExitNotification;
 use LSP\Protocol\Notification\InitializedNotification;
-use LSP\Protocol\Notification\Notification;
 use LSP\Protocol\Request\CodeLensRequest;
 use LSP\Protocol\Request\ExecuteCommandRequest;
 use LSP\Protocol\Request\InitializeRequest;
-use LSP\Protocol\Request\Request;
 use LSP\Protocol\Request\ShutdownRequest;
 use LSP\Protocol\Request\TextDocumentDefinitionRequest;
 use LSP\Protocol\Type\Method;
 use LSP\Protocol\Type\ServerCapabilities;
 use LSP\Protocol\Type\ServerInfo;
+use LSP\RPC\IncomingMessage;
+use LSP\RPC\RPC;
 
 class Server
 {
@@ -53,11 +53,11 @@ class Server
             $result = RPC::split($data);
 
             if ($result) {
-                $data = substr($data, $result['length']);
+                $data = substr($data, $result->length);
 
-                $message = RPC::decode($result['data'], $error);
+                $message = RPC::decode($result->data, $error);
 
-                if ($error) {
+                if ($error || !$message) {
                     $this->context->logger->log($error);
                     continue;
                 }
@@ -72,11 +72,12 @@ class Server
     }
 
     /**
-     * @param Request|Notification $message
+     * @param IncomingMessage $message
      */
     private function handle(object $message): void
     {
-        $this->context->logger->log("Received method: {$message->method}");
+        $this->context->logger->log("Received message: {$message->method}");
+        $this->context->logger->log($message);
 
         $method = Method::tryFrom($message->method);
 

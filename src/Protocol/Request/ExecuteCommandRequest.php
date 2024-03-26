@@ -16,6 +16,22 @@ class ExecuteCommandRequest extends Request
     public Method $method = Method::WORKSPACE_EXECUTECOMMAND;
     public ExecuteCommandParams $params;
 
+    public function __construct(
+        string $jsonrpc,
+        int $id,
+
+        Method $method,
+        ExecuteCommandParams $params,
+    ) {
+        parent::__construct(
+            jsonrpc: $jsonrpc,
+            id: $id,
+        );
+
+        $this->method = $method;
+        $this->params = $params;
+    }
+
     public function handle(Context $context): ?Response
     {
         $context->logger->log("Executing command: {$this->params->command}");

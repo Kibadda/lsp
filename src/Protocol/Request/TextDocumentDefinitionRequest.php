@@ -16,6 +16,22 @@ class TextDocumentDefinitionRequest extends Request
     public Method $method = Method::TEXTDOCUMENT_DEFINITION;
     public DefinitionParams $params;
 
+    public function __construct(
+        string $jsonrpc,
+        int $id,
+
+        Method $method,
+        DefinitionParams $params,
+    ) {
+        parent::__construct(
+            jsonrpc: $jsonrpc,
+            id: $id,
+        );
+
+        $this->method = $method;
+        $this->params = $params;
+    }
+
     public function handle(Context $context): ?Response
     {
         $context->logger->log("Requesting definition for: {$this->params->textDocument->uri}:{$this->params->position->line}:{$this->params->position->character}");

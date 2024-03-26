@@ -8,5 +8,8 @@ class TextDocumentContentChangesEvent
 {
     use Builder;
 
-    public string $text;
+    public function __construct(
+        public string $text,
+    ) {
+    }
 }
