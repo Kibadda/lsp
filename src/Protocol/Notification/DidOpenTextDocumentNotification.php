@@ -4,14 +4,15 @@ namespace LSP\Protocol\Notification;
 
 use LSP\Builder;
 use LSP\Context;
-use LSP\Handler;
 use LSP\Protocol\Response\Response;
 use LSP\Protocol\Type\DidOpenTextDocumentParams;
+use LSP\Protocol\Type\Method;
 
-class DidOpenTextDocumentNotification extends Notification implements Handler
+class DidOpenTextDocumentNotification extends Notification
 {
     use Builder;
 
+    public Method $method = Method::TEXTDOCUMENT_DIDOPEN;
     public DidOpenTextDocumentParams $params;
 
     public function handle(Context $context): ?Response

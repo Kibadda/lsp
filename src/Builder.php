@@ -4,6 +4,7 @@ namespace LSP;
 
 use Exception;
 use ReflectionClass;
+use UnitEnum;
 
 trait Builder
 {
@@ -13,6 +14,7 @@ trait Builder
 
         $static = new static();
 
+        $default = $reflection->getDefaultProperties();
         foreach ($reflection->getProperties() as $property) {
             $name = $property->getName();
             $type = $property->getType();
@@ -50,8 +52,25 @@ trait Builder
                 } else {
                     $static->$name = $object->$name;
                 }
+            } else if (self::is_enum($type)) {
+                $enum = $type->getName();
+                $try = $enum::tryFrom($object->$name);
+
+                if (!$try instanceof $enum) {
+                    throw new Exception("{$object->$name} is not a valid value for {$type}");
+                }
+
+                if (!empty($default[$name]) && $default[$name]->value != $object->$name) {
+                    throw new Exception("wrong value for {$name}. expected: {$default[$name]->value}. actual: {$object->$name}");
+                }
+
+                $static->$name = $try;
             } else {
                 if ($type->isBuiltin()) {
+                    if (!empty($default[$name]) && $default[$name] != $object->$name) {
+                        throw new Exception("wrong value for {$name}. expected: {$default[$name]}. actual: {$object->$name}");
+                    }
+
                     $static->$name = $object->$name;
                 } else {
                     $type = $type->getName();
@@ -67,5 +86,16 @@ trait Builder
         }
 
         return $static;
+    }
+
+    private static function is_enum(string $class): bool
+    {
+        if (!class_exists($class)) {
+            return false;
+        }
+
+        $reflection = new ReflectionClass($class);
+
+        return $reflection->isSubclassOf(UnitEnum::class);
     }
 }

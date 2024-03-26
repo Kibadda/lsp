@@ -7,11 +7,13 @@ use LSP\Context;
 use LSP\Protocol\Response\Response;
 use LSP\Protocol\Response\TextDocumentDefinitionResponse;
 use LSP\Protocol\Type\DefinitionParams;
+use LSP\Protocol\Type\Method;
 
 class TextDocumentDefinitionRequest extends Request
 {
     use Builder;
 
+    public Method $method = Method::TEXTDOCUMENT_DEFINITION;
     public DefinitionParams $params;
 
     public function handle(Context $context): ?Response
