@@ -4,6 +4,9 @@ namespace LSP;
 
 use LSP\Protocol\Type\CodeLens;
 use LSP\Protocol\Type\Command;
+use LSP\Protocol\Type\DidChangeTextDocumentParams;
+use LSP\Protocol\Type\DidCloseTextDocumentParams;
+use LSP\Protocol\Type\DidOpenTextDocumentParams;
 use LSP\Protocol\Type\Position;
 use LSP\Protocol\Type\Range;
 use stdClass;
@@ -27,22 +30,69 @@ class State
         ];
     }
 
-    public function openTextDocument(string $uri, string $contents): void
+    public function openTextDocument(DidOpenTextDocumentParams $params): void
     {
-        $this->textDocuments[$uri] = $contents;
-        $this->codeLenses[$uri] = $this->calculateCodeLenses($uri, $contents);
+        $this->textDocuments[$params->textDocument->uri] = $params->textDocument->text;
+        // $this->codeLenses[$params->textDocument->uri] = $this->calculateCodeLenses($uri, $contents);
     }
 
-    public function changeTextDocument(string $uri, string $contents): void
+    public function changeTextDocument(DidChangeTextDocumentParams $params): void
     {
-        $this->textDocuments[$uri] = $contents;
-        $this->codeLenses[$uri] = $this->calculateCodeLenses($uri, $contents);
+        $document = $this->textDocuments[$params->textDocument->uri];
+
+        foreach ($params->contentChanges as $change) {
+            $i = 0;
+            $start = null;
+            $end = null;
+
+            if (empty($document[$i])) {
+                $start = 0;
+                $end = 0;
+            } else {
+                $line = 0;
+                $character = 0;
+
+                while (!empty($document[$i])) {
+                    if (is_null($start) && $line == $change->range->start->line && $character == $change->range->start->character) {
+                        $start = $i;
+                    }
+
+                    if (is_null($end) && $line == $change->range->end->line && $character == $change->range->end->character) {
+                        $end = $i;
+                    }
+
+                    if ($document[$i] == "\n") {
+                        $line++;
+                        $character = 0;
+                    } else {
+                        $character++;
+                    }
+
+                    $i++;
+
+                    if (!is_null($start) && !is_null($end)) {
+                        break;
+                    }
+                }
+
+                if (is_null($end)) {
+                    $end = $i;
+                }
+            }
+
+            if (!is_null($start) && !is_null($end)) {
+                $document = substr($document, 0, $start) . $change->text . substr($document, $end);
+            }
+        }
+
+        $this->textDocuments[$params->textDocument->uri] = $document;
+        // $this->codeLenses[$uri] = $this->calculateCodeLenses($uri, $contents);
     }
 
-    public function closeTextDocument(string $uri): void
+    public function closeTextDocument(DidCloseTextDocumentParams $params): void
     {
-        unset($this->textDocuments[$uri]);
-        unset($this->codeLenses[$uri]);
+        unset($this->textDocuments[$params->textDocument->uri]);
+        unset($this->codeLenses[$params->textDocument->uri]);
     }
 
     /**

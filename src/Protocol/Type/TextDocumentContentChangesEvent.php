@@ -9,6 +9,7 @@ class TextDocumentContentChangesEvent
     use Builder;
 
     public function __construct(
+        public Range $range,
         public string $text,
     ) {
     }

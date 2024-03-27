@@ -14,7 +14,7 @@ enum ServerName: string
     {
         return match ($this) {
             self::CONFIG => new ServerCapabilities(
-                textDocumentSync: 1,
+                textDocumentSync: 2,
                 // codeLensProvider: new CodeLensOptions(
                 //     resolveProvider: false,
                 // ),

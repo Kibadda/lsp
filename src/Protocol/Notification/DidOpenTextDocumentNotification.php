@@ -33,7 +33,7 @@ class DidOpenTextDocumentNotification extends Notification
     {
         $context->logger->log("Opened: {$this->params->textDocument->uri}");
 
-        $context->state->openTextDocument($this->params->textDocument->uri, $this->params->textDocument->text);
+        $context->state->openTextDocument($this->params);
 
         return null;
     }

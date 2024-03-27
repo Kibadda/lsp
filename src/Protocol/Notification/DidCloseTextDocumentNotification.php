@@ -33,7 +33,7 @@ class DidCloseTextDocumentNotification extends Notification
     {
         $context->logger->log("Closed: {$this->params->textDocument->uri}");
 
-        $context->state->closeTextDocument($this->params->textDocument->uri);
+        $context->state->closeTextDocument($this->params);
 
         return null;
     }
