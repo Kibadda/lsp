@@ -75,7 +75,7 @@ class State
                     }
                 }
 
-                if (is_null($end)) {
+                if (!is_null($start) && is_null($end)) {
                     $end = $i;
                 }
             }
@@ -107,39 +107,39 @@ class State
         return null;
     }
 
-    /**
-     * @return CodeLens[]
-     */
-    private function calculateCodeLenses(string $uri, string $contents): array
-    {
-        if (!preg_match('/.*\/\.config\/nvim\/lua\/user\/plugins\/.*/', $uri)) {
-            return [];
-        }
+    // /**
+    //  * @return CodeLens[]
+    //  */
+    // private function calculateCodeLenses(string $uri, string $contents): array
+    // {
+    //     if (!preg_match('/.*\/\.config\/nvim\/lua\/user\/plugins\/.*/', $uri)) {
+    //         return [];
+    //     }
 
-        $codeLenses = [];
+    //     $codeLenses = [];
 
-        $codeLenses[] = new CodeLens(
-            range: new Range(
-                start: new Position(
-                    line: 0,
-                    character: 0,
-                ),
-                end: new Position(
-                    line: 0,
-                    character: 1,
-                ),
-            ),
-            command: new Command(
-                title: 'open plugin',
-                command: 'open_plugin_in_browser',
-                arguments: [
-                    'text' => 'Kibadda/configlsp',
-                ],
-            ),
-        );
+    //     $codeLenses[] = new CodeLens(
+    //         range: new Range(
+    //             start: new Position(
+    //                 line: 0,
+    //                 character: 0,
+    //             ),
+    //             end: new Position(
+    //                 line: 0,
+    //                 character: 1,
+    //             ),
+    //         ),
+    //         command: new Command(
+    //             title: 'open plugin',
+    //             command: 'open_plugin_in_browser',
+    //             arguments: [
+    //                 'text' => 'Kibadda/configlsp',
+    //             ],
+    //         ),
+    //     );
 
-        return $codeLenses;
-    }
+    //     return $codeLenses;
+    // }
 
     public function executeCommand(string $command, mixed $arguments): void
     {

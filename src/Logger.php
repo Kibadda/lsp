@@ -35,12 +35,16 @@ class Logger
             default => json_encode($message, JSON_PRETTY_PRINT),
         };
 
+        if (!is_resource($this->stream)) {
+            throw new Exception('could not open log file');
+        }
+
         fwrite($this->stream, "[{$date}] [{$this->name}] [{$level}] {$message}\n");
     }
 
     public function __destruct()
     {
-        if ($this->stream) {
+        if ($this->stream && is_resource($this->stream)) {
             fclose($this->stream);
         }
     }
