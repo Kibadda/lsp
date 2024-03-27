@@ -2,13 +2,8 @@
 
 namespace LSP\Protocol\Type;
 
-use LSP\Builder;
-
 class DidChangeTextDocumentParams
 {
-    use Builder;
-
-
     /**
      * @param TextDocumentContentChangesEvent[] $contentChanges
      */

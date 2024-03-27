@@ -2,12 +2,8 @@
 
 namespace LSP\Protocol\Type;
 
-use LSP\Builder;
-
 class ExecuteCommandParams
 {
-    use Builder;
-
     /**
      * @param ?mixed[] $arguments
      */

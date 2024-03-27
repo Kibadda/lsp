@@ -2,7 +2,6 @@
 
 namespace LSP\Protocol\Request;
 
-use LSP\Builder;
 use LSP\Context;
 use LSP\Protocol\Response\ExecuteCommandResponse;
 use LSP\Protocol\Response\Response;
@@ -11,8 +10,6 @@ use LSP\Protocol\Type\Method;
 
 class ExecuteCommandRequest extends Request
 {
-    use Builder;
-
     public Method $method = Method::WORKSPACE_EXECUTECOMMAND;
     public ExecuteCommandParams $params;
 

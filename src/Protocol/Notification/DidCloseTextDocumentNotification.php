@@ -2,7 +2,6 @@
 
 namespace LSP\Protocol\Notification;
 
-use LSP\Builder;
 use LSP\Context;
 use LSP\Protocol\Response\Response;
 use LSP\Protocol\Type\DidCloseTextDocumentParams;
@@ -10,8 +9,6 @@ use LSP\Protocol\Type\Method;
 
 class DidCloseTextDocumentNotification extends Notification
 {
-    use Builder;
-
     public Method $method = Method::TEXTDOCUMENT_DIDCLOSE;
     public DidCloseTextDocumentParams $params;
 
