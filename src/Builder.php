@@ -37,9 +37,9 @@ trait Builder
                     throw new Exception("expected array for property {$name}");
                 }
 
-                $comment = $property->getDocComment();
+                $comment = $reflection->getConstructor()->getDocComment();
 
-                if ($comment !== false && preg_match('/@var\s+([^\[]+)/', $comment, $matches)) {
+                if ($comment !== false && preg_match('/@param\s+([^\[]+)\[\]\s+\$' . $name . '/', $comment, $matches)) {
                     $type = $matches[1];
                     if (!str_starts_with($type, '\\')) {
                         $type = "{$reflection->getNamespaceName()}\\{$type}";

@@ -8,9 +8,12 @@ class DidChangeTextDocumentParams
 {
     use Builder;
 
+
+    /**
+     * @param TextDocumentContentChangesEvent[] $contentChanges
+     */
     public function __construct(
         public VersionedTextDocumentIdentifier $textDocument,
-        /** @var TextDocumentContentChangesEvent[] */
         public array $contentChanges,
     ) {
     }
