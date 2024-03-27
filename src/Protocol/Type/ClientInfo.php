@@ -6,7 +6,7 @@ class ClientInfo
 {
     public function __construct(
         public string $name,
-        public ?string $version,
+        public ?string $version = null,
     ) {
     }
 }

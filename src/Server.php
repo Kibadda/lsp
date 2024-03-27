@@ -2,16 +2,6 @@
 
 namespace LSP;
 
-use LSP\Protocol\Notification\DidChangeTextDocumentNotification;
-use LSP\Protocol\Notification\DidCloseTextDocumentNotification;
-use LSP\Protocol\Notification\DidOpenTextDocumentNotification;
-use LSP\Protocol\Notification\ExitNotification;
-use LSP\Protocol\Notification\InitializedNotification;
-use LSP\Protocol\Request\CodeLensRequest;
-use LSP\Protocol\Request\ExecuteCommandRequest;
-use LSP\Protocol\Request\InitializeRequest;
-use LSP\Protocol\Request\ShutdownRequest;
-use LSP\Protocol\Request\TextDocumentDefinitionRequest;
 use LSP\Protocol\Type\Method;
 use LSP\Protocol\Type\ServerCapabilities;
 use LSP\Protocol\Type\ServerInfo;
@@ -79,31 +69,15 @@ class Server
         $this->context->logger->log("Received message: {$message->method}");
         $this->context->logger->log($message);
 
-        $method = Method::tryFrom($message->method);
+        $handler = Builder::build($message);
 
-        if (!$method instanceof Method) {
-            $this->context->logger->log("Unrecognized method");
+        if (empty($handler)) {
+            $this->context->logger->log('Unrecognized method');
 
             return;
         }
 
-        $message = match ($method) {
-            Method::INITIALIZE => InitializeRequest::from($message),
-            Method::INITIALIZED => InitializedNotification::from($message),
-            Method::SHUTDOWN => ShutdownRequest::from($message),
-            Method::EXIT => ExitNotification::from($message),
-
-            Method::TEXTDOCUMENT_DIDOPEN => DidOpenTextDocumentNotification::from($message),
-            Method::TEXTDOCUMENT_DIDCHANGE => DidChangeTextDocumentNotification::from($message),
-            Method::TEXTDOCUMENT_DIDCLOSE => DidCloseTextDocumentNotification::from($message),
-
-            Method::TEXTDOCUMENT_CODELENS => CodeLensRequest::from($message),
-            Method::TEXTDOCUMENT_DEFINITION => TextDocumentDefinitionRequest::from($message),
-
-            Method::WORKSPACE_EXECUTECOMMAND => ExecuteCommandRequest::from($message),
-        };
-
-        $response = $message->handle($this->context);
+        $response = $handler->handle($this->context);
 
         if ($response) {
             fwrite(STDOUT, RPC::encode($response));

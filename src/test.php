@@ -1,7 +1,8 @@
 <?php
 
-use LSP\Protocol\Request\InitializeRequest;
+use LSP\Builder;
 use LSP\Protocol\Type\Method;
+use LSP\RPC\IncomingMessage;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -17,6 +18,8 @@ $object = (object) [
     ],
 ];
 
-$test = InitializeRequest::from($object);
+$message = IncomingMessage::from($object);
+
+$test = Builder::build($message);
 
 print_r($test);
