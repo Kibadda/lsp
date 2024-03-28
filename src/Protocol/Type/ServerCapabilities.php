@@ -9,6 +9,7 @@ class ServerCapabilities
         public ?CodeLensOptions $codeLensProvider,
         public ?ExecuteCommandOptions $executeCommandProvider,
         public ?bool $definitionProvider,
+        public ?CompletionOptions $completionProvider,
     ) {
     }
 }

@@ -3,6 +3,8 @@
 namespace LSP;
 
 // use LSP\Protocol\Type\CodeLensOptions;
+
+use LSP\Protocol\Type\CompletionOptions;
 use LSP\Protocol\Type\ExecuteCommandOptions;
 use LSP\Protocol\Type\ServerCapabilities;
 
@@ -23,6 +25,11 @@ enum ServerName: string
                     commands: ['open_plugin_in_browser'],
                 ),
                 definitionProvider: true,
+                completionProvider: new CompletionOptions(
+                    triggerCharacters: null,
+                    allCommitCharacters: null,
+                    resolveProvider: false,
+                ),
             ),
         };
     }

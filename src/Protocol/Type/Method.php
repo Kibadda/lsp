@@ -8,6 +8,7 @@ use LSP\Protocol\Notification\DidOpenTextDocumentNotification;
 use LSP\Protocol\Notification\ExitNotification;
 use LSP\Protocol\Notification\InitializedNotification;
 use LSP\Protocol\Request\CodeLensRequest;
+use LSP\Protocol\Request\CompletionRequest;
 use LSP\Protocol\Request\ExecuteCommandRequest;
 use LSP\Protocol\Request\InitializeRequest;
 use LSP\Protocol\Request\ShutdownRequest;
@@ -26,6 +27,7 @@ enum Method: string
 
     case TEXTDOCUMENT_DEFINITION = 'textDocument/definition';
     case TEXTDOCUMENT_CODELENS = 'textDocument/codeLens';
+    case TEXTDOCUMENT_COMPLETION = 'textDocument/completion';
 
     case WORKSPACE_EXECUTECOMMAND = 'workspace/executeCommand';
 
@@ -43,6 +45,7 @@ enum Method: string
 
             Method::TEXTDOCUMENT_CODELENS => CodeLensRequest::class,
             Method::TEXTDOCUMENT_DEFINITION => TextDocumentDefinitionRequest::class,
+            Method::TEXTDOCUMENT_COMPLETION => CompletionRequest::class,
 
             Method::WORKSPACE_EXECUTECOMMAND => ExecuteCommandRequest::class,
         };
